@@ -1,2 +1,2 @@
 # Finsey
-Personal Finanse Management App
+Personal Finance Management App
