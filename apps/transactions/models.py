@@ -15,7 +15,6 @@ class Transaction(models.Model):
     description = models.TextField(blank=True, null=True)
     is_constant = models.BooleanField(default=False)
 
-
     def __str__(self):
         return f"{self.title} - {self.transaction_type} ({self.amount})"
 

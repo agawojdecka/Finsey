@@ -1,5 +1,6 @@
-from .models import Transaction, Category
 from rest_framework import serializers
+
+from .models import Transaction, Category
 
 
 class CategorySerializer(serializers.ModelSerializer):
