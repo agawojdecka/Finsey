@@ -1,0 +1,31 @@
+from .models import Transaction
+from rest_framework import serializers
+
+class TransactionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Transaction
+        fields = [
+            'id',              # Including `id` to identify transactions
+            'title',
+            'transaction_type',
+            'amount',
+            'date',
+            'description',
+        ]
+        read_only_fields = ['id']
+
+    def validate_amount(self, value):
+        """
+        Ensure the amount is positive.
+        """
+        if value <= 0:
+            raise serializers.ValidationError("Amount must be greater than zero.")
+        return value
+
+    def validate_type(self, data):
+        """
+        Additional validation to ensure logical constraints between fields.
+        """
+        if data['transaction_type'] not in [Transaction.Types.INCOME, Transaction.Types.EXPENSE]:
+            raise serializers.ValidationError("Invalid transaction type.")
+        return data
