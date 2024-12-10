@@ -15,9 +15,9 @@ class TransactionFilter(django_filters.FilterSet):
         to_field_name='title',
         label='Category'
     )
-    date = django_filters.DateFilter(
+    date = django_filters.DateFromToRangeFilter(
         field_name='date',
-        lookup_expr='exact',
+        label='Date (Range)'
     )
     is_constant = django_filters.BooleanFilter(field_name='is_constant')
 
