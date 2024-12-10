@@ -11,7 +11,7 @@ class Transaction(models.Model):
     transaction_type = models.CharField(max_length=10, choices=Types)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     category = models.ForeignKey('Category', on_delete=models.SET_NULL, null=True, related_name="transactions")
-    date = models.DateField(default=timezone.now().date(), blank=True)
+    date = models.DateField(default=timezone.now, blank=True)
     description = models.TextField(blank=True, null=True)
     is_constant = models.BooleanField(default=False)
 
