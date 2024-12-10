@@ -1,5 +1,7 @@
 import django_filters
+
 from apps.transactions.models import Transaction, Category
+
 
 class TransactionFilter(django_filters.FilterSet):
     transaction_type = django_filters.ChoiceFilter(
