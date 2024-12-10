@@ -13,6 +13,8 @@ class Transaction(models.Model):
     category = models.ForeignKey('Category', on_delete=models.SET_NULL, null=True, related_name="transactions")
     date = models.DateField(default=timezone.now().date(), blank=True)
     description = models.TextField(blank=True, null=True)
+    is_constant = models.BooleanField(default=False)
+
 
     def __str__(self):
         return f"{self.title} - {self.transaction_type} ({self.amount})"

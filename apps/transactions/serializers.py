@@ -10,6 +10,7 @@ class CategorySerializer(serializers.ModelSerializer):
             'title',
             'transaction_type',
         ]
+        read_only_fields = ['id']
 
 
 class TransactionReadSerializer(serializers.ModelSerializer):
@@ -25,6 +26,7 @@ class TransactionReadSerializer(serializers.ModelSerializer):
             'category',
             'date',
             'description',
+            'is_constant'
         ]
         read_only_fields = ['id']
 
@@ -40,6 +42,7 @@ class TransactionSerializer(serializers.ModelSerializer):
             'category',
             'date',
             'description',
+            'is_constant'
         ]
         read_only_fields = ['id']
 
