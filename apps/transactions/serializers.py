@@ -9,6 +9,7 @@ class TransactionSerializer(serializers.ModelSerializer):
             'title',
             'transaction_type',
             'amount',
+            'category',
             'date',
             'description',
         ]
