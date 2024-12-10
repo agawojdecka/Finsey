@@ -1,11 +1,39 @@
 from .models import Transaction, Category
 from rest_framework import serializers
 
+
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = [
+            'id',
+            'title',
+            'transaction_type',
+        ]
+
+
+class TransactionReadSerializer(serializers.ModelSerializer):
+    category = CategorySerializer()
+
+    class Meta:
+        model = Transaction
+        fields = [
+            'id',  # Including `id` to identify transactions
+            'title',
+            'transaction_type',
+            'amount',
+            'category',
+            'date',
+            'description',
+        ]
+        read_only_fields = ['id']
+
+
 class TransactionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Transaction
         fields = [
-            'id',              # Including `id` to identify transactions
+            'id',  # Including `id` to identify transactions
             'title',
             'transaction_type',
             'amount',
@@ -31,12 +59,5 @@ class TransactionSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Invalid transaction type.")
         return data
 
-
-class CategorySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Category
-        fields = [
-            'id',
-            'title',
-            'transaction_type',
-        ]
+    def to_representation(self, instance):
+        return TransactionReadSerializer(instance).data
