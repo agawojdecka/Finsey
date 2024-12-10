@@ -1,4 +1,4 @@
-from .models import Transaction
+from .models import Transaction, Category
 from rest_framework import serializers
 
 class TransactionSerializer(serializers.ModelSerializer):
@@ -30,3 +30,13 @@ class TransactionSerializer(serializers.ModelSerializer):
         if data['transaction_type'] not in [Transaction.Types.INCOME, Transaction.Types.EXPENSE]:
             raise serializers.ValidationError("Invalid transaction type.")
         return data
+
+
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = [
+            'id',
+            'title',
+            'transaction_type',
+        ]
