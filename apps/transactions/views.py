@@ -15,10 +15,12 @@ class TransactionListCreateView(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return Transaction.objects.filter(user=self.request.user) # Return transactions for the logged-in user
+        return Transaction.objects.filter(
+            user=self.request.user
+        )  # Return transactions for the logged-in user
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user) # Automatically set the user to the logged-in user
+        serializer.save(user=self.request.user)  # Automatically set the user to the logged-in user
 
 
 class TransactionDetailView(generics.RetrieveUpdateDestroyAPIView):
@@ -27,7 +29,10 @@ class TransactionDetailView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return Transaction.objects.filter(user=self.request.user) # Return transactions for the logged-in user
+        return Transaction.objects.filter(
+            user=self.request.user
+        )  # Return transactions for the logged-in user
+
 
 class CategoryListCreateView(generics.ListCreateAPIView):
     queryset = Category.objects.all()
@@ -35,10 +40,13 @@ class CategoryListCreateView(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return Transaction.objects.filter(user=self.request.user) # Return categories for the logged-in user
+        return Transaction.objects.filter(
+            user=self.request.user
+        )  # Return categories for the logged-in user
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user) # Automatically set the user to the logged-in user
+        serializer.save(user=self.request.user)  # Automatically set the user to the logged-in user
+
 
 class CategoryDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Category.objects.all()
@@ -46,4 +54,6 @@ class CategoryDetailView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return Transaction.objects.filter(user=self.request.user) # Return categories for the logged-in user
+        return Transaction.objects.filter(
+            user=self.request.user
+        )  # Return categories for the logged-in user

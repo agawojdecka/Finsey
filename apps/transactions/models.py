@@ -13,11 +13,15 @@ class Transaction(models.Model):
     title = models.CharField(max_length=255)
     transaction_type = models.CharField(max_length=10, choices=Types)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
-    category = models.ForeignKey('Category', on_delete=models.SET_NULL, null=True, related_name="transactions")
+    category = models.ForeignKey(
+        "Category", on_delete=models.SET_NULL, null=True, related_name="transactions"
+    )
     date = models.DateField(default=date.today, blank=True)
     description = models.TextField(blank=True, null=True)
     is_constant = models.BooleanField(default=False)
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name="transactions")
+    user = models.ForeignKey(
+        User, on_delete=models.SET_NULL, null=True, related_name="transactions"
+    )
 
     def __str__(self):
         return f"{self.title} - {self.transaction_type} ({self.amount})"
