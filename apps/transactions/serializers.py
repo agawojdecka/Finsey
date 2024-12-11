@@ -27,7 +27,8 @@ class TransactionReadSerializer(serializers.ModelSerializer):
             'category',
             'date',
             'description',
-            'is_constant'
+            'is_constant',
+            'user',
         ]
         read_only_fields = ['id']
 
@@ -43,7 +44,7 @@ class TransactionSerializer(serializers.ModelSerializer):
             'category',
             'date',
             'description',
-            'is_constant'
+            'is_constant',
         ]
         read_only_fields = ['id']
 
