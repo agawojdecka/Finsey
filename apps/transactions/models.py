@@ -30,6 +30,7 @@ class Category(models.Model):
 
     title = models.CharField(max_length=255)
     transaction_type = models.CharField(max_length=10, choices=Types)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name="categories")
 
     def __str__(self):
         return self.title

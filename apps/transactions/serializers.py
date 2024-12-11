@@ -10,8 +10,9 @@ class CategorySerializer(serializers.ModelSerializer):
             'id',
             'title',
             'transaction_type',
+            'user'
         ]
-        read_only_fields = ['id']
+        read_only_fields = ['id', 'user']
 
 
 class TransactionReadSerializer(serializers.ModelSerializer):
@@ -46,7 +47,7 @@ class TransactionSerializer(serializers.ModelSerializer):
             'description',
             'is_constant',
         ]
-        read_only_fields = ['id']
+        read_only_fields = ['id', 'user']
 
     def validate_amount(self, value):
         """
