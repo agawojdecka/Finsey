@@ -26,12 +26,24 @@ class TransactionDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = TransactionSerializer
     permission_classes = [IsAuthenticated]
 
+    def get_queryset(self):
+        return Transaction.objects.filter(user=self.request.user) # Return transactions for the logged-in user
 
 class CategoryListCreateView(generics.ListCreateAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+    permission_classes = [IsAuthenticated]
 
+    def get_queryset(self):
+        return Transaction.objects.filter(user=self.request.user) # Return categories for the logged-in user
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user) # Automatically set the user to the logged-in user
 
 class CategoryDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Transaction.objects.filter(user=self.request.user) # Return categories for the logged-in user
