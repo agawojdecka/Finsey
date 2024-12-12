@@ -6,7 +6,12 @@ from .models import Transaction, Category
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
-        fields = ["id", "title", "transaction_type", "user"]
+        fields = [
+            "id",
+            "title",
+            "transaction_type",
+            "user"
+        ]
         read_only_fields = ["id", "user"]
 
 
@@ -26,7 +31,7 @@ class TransactionReadSerializer(serializers.ModelSerializer):
             "is_constant",
             "user",
         ]
-        read_only_fields = ["id"]
+        read_only_fields = ["id", "user"]
 
 
 class TransactionSerializer(serializers.ModelSerializer):
