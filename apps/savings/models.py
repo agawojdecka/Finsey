@@ -13,30 +13,22 @@ class Saving(models.Model):
     operation_type = models.CharField(max_length=10, choices=Types)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="savings")
     amount = models.DecimalField(max_digits=10, decimal_places=2)
-    purpose = models.ForeignKey("Purpose", on_delete=models.SET_NULL, null=True, related_name="savings")  # Emergency Fund, Vacation, Car etc.
+    goal = models.ForeignKey("Goal", on_delete=models.SET_NULL, null=True,
+                             related_name="savings")  # Emergency Fund, Vacation, Car etc.
     date = models.DateField(default=date.today, blank=True)
     description = models.TextField(blank=True, null=True)
 
     def __str__(self):
         sign = "+" if self.operation_type == "INFLOW" else "-"
-        return f"{sign}{self.amount} {self.purpose}"
-
-
-class Purpose(models.Model):
-    title = models.CharField(max_length=255)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="purposes")
-    description = models.TextField(blank=True, null=True)
-
-    def __str__(self):
-        return self.title
+        return f"{sign}{self.amount} {self.goal}"
 
 
 class Goal(models.Model):
-    purpose = models.ForeignKey("Purpose", on_delete=models.SET_NULL, null=True, related_name="goals")
+    title = models.CharField(max_length=255, blank=True, null=True)
     target_date = models.DateField(blank=True, null=True)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="goals")
     description = models.TextField(blank=True, null=True)
 
     def __str__(self):
-        return f"{self.amount} {self.purpose}"
+        return f"{self.amount} {self.title}"
