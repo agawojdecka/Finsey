@@ -29,3 +29,14 @@ class Purpose(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class Goal(models.Model):
+    purpose = models.ForeignKey("Purpose", on_delete=models.SET_NULL, null=True, related_name="goals")
+    target_date = models.DateField(blank=True, null=True)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="goals")
+    description = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.amount} {self.purpose}"
