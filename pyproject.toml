@@ -6,3 +6,18 @@ exclude = '''
         migrations
     )/
 '''
+[tool.poetry]
+name = "finsey"
+version = "0.1.0"
+description = "A personal finance management tool"
+authors = ["Agnieszka Wojdecka <agnieszka.wojdecka@wp.pl>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
