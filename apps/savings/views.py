@@ -1,6 +1,8 @@
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 
+from apps.savings.filters import SavingFilter
 from apps.savings.models import Saving, Goal
 from apps.savings.serializers import SavingSerializer, GoalSerializer
 
@@ -8,6 +10,8 @@ from apps.savings.serializers import SavingSerializer, GoalSerializer
 class SavingListCreateView(generics.ListCreateAPIView):
     queryset = Saving.objects.all()
     serializer_class = SavingSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = SavingFilter
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
