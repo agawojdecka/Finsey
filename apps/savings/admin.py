@@ -1,3 +1,7 @@
 from django.contrib import admin
 
-# Register your models here.
+from apps.savings.models import Saving, Purpose
+
+
+admin.site.register(Saving)
+admin.site.register(Purpose)
