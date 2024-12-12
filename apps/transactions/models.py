@@ -20,11 +20,12 @@ class Transaction(models.Model):
     description = models.TextField(blank=True, null=True)
     is_constant = models.BooleanField(default=False)
     user = models.ForeignKey(
-        User, on_delete=models.SET_NULL, null=True, related_name="transactions"
+        User, on_delete=models.CASCADE, null=True, related_name="transactions"
     )
 
     def __str__(self):
-        return f"{self.title} - {self.transaction_type} ({self.amount})"
+        sign = "+" if self.transaction_type == "INCOME" else "-"
+        return f"{sign}{self.amount} {self.title}"
 
 
 class Category(models.Model):
@@ -34,7 +35,7 @@ class Category(models.Model):
 
     title = models.CharField(max_length=255)
     transaction_type = models.CharField(max_length=10, choices=Types)
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name="categories")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name="categories")
 
     def __str__(self):
         return self.title
