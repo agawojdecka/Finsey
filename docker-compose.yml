@@ -19,7 +19,44 @@ services:
       - DB_PORT=5432  # PostgreSQL default port
     depends_on:
       - db  # Ensure PostgreSQL is up before Django
-
+      - redis
+      - celery
+      - celery-beat
+  redis: # queue
+    image: redis:6.2
+    ports:
+      - "6379:6379"
+  celery:
+    build: .
+    command: celery -A finsey worker --loglevel=info
+    volumes:
+      - .:/app
+    depends_on:
+      - redis
+      - celery-beat
+    environment:
+      - DEBUG=True
+      - ALLOWED_HOSTS=127.0.0.1,localhost  # Set allowed hosts
+      - DB_NAME=postgres_finsey  # Database name
+      - DB_USER=postgres  # Database user
+      - DB_PASSWORD=1234  # Database password
+      - DB_HOST=db  # PostgreSQL service name
+      - DB_PORT=5432  # PostgreSQL default port
+  celery-beat:
+    build: .
+    command: celery -A finsey beat -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler
+    volumes:
+      - .:/app
+    depends_on:
+      - redis
+    environment:
+      - DEBUG=True
+      - ALLOWED_HOSTS=127.0.0.1,localhost  # Set allowed hosts
+      - DB_NAME=postgres_finsey  # Database name
+      - DB_USER=postgres  # Database user
+      - DB_PASSWORD=1234  # Database password
+      - DB_HOST=db  # PostgreSQL service name
+      - DB_PORT=5432  # PostgreSQL default port
   db:
     image: postgres:13  # Use the official PostgreSQL image
     container_name: postgres_db
@@ -29,6 +66,8 @@ services:
       POSTGRES_PASSWORD: 1234  # Password for the user
     volumes:
       - postgres_data:/var/lib/postgresql/data  # Persist database data
+    ports:
+      - "5432:5432"  # Expose port 5432 so we can reach db from outside of container
 
 volumes:
   postgres_data:

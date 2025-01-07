@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "django_filters",
     'rest_framework.authtoken',
+    'django_celery_beat',
 
     "apps.transactions",
     "apps.users",
@@ -86,7 +87,7 @@ DATABASES = {
         'NAME': os.getenv('DB_NAME', 'postgres_finsey'),  # Name of the database
         'USER': os.getenv('DB_USER', 'postgres'),  # Username for PostgreSQL
         'PASSWORD': os.getenv('DB_PASSWORD', '1234'),  # Password for PostgreSQL user
-        'HOST': os.getenv('DB_HOST', 'db'),  # Host is the name of the service in Docker Compose
+        'HOST': os.getenv('DB_HOST', 'localhost'),  # Host is the name of the service in Docker Compose
         'PORT': os.getenv('DB_PORT', '5432'),  # Default PostgreSQL port
     }
 }
@@ -143,7 +144,7 @@ REST_FRAMEWORK = {
 AUTH_USER_MODEL = "users.User"
 
 # Celery settings
-CELERY_BROKER_URL = 'redis://localhost:6379/0'  # Redis URL
+CELERY_BROKER_URL = 'redis://redis:6379/0'  # Redis URL
 CELERY_ACCEPT_CONTENT = ['json']  # Accepted content types
 CELERY_TASK_SERIALIZER = 'json'  # Serializer format
 
