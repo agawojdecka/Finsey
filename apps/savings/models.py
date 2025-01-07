@@ -19,7 +19,7 @@ class Saving(models.Model):
     description = models.TextField(blank=True, null=True)
 
     def __str__(self):
-        sign = "+" if self.operation_type == "INFLOW" else "-"
+        sign = "+" if self.operation_type == self.Types.INFLOW else "-"
         return f"{sign}{self.amount} {self.goal}"
 
 

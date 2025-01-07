@@ -24,7 +24,7 @@ class Transaction(models.Model):
     )
 
     def __str__(self):
-        sign = "+" if self.transaction_type == "INCOME" else "-"
+        sign = "+" if self.transaction_type == self.Types.INCOME else "-"
         return f"{sign}{self.amount} {self.title}"
 
 
