@@ -1,6 +1,9 @@
+from django.db.models import Sum
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from .filters import TransactionFilter
 from .models import Transaction, Category
@@ -57,3 +60,25 @@ class CategoryDetailView(generics.RetrieveUpdateDestroyAPIView):
         return Transaction.objects.filter(
             user=self.request.user
         )  # Return categories for the logged-in user
+
+
+class GetBalanceView(APIView):
+    """
+    API view to calculate and retrieve the balance (INCOME - EXPENSE).
+    """
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        transactions = Transaction.objects.all()
+        incomes = transactions.filter(transaction_type=Transaction.Types.INCOME).aggregate(total=Sum('amount'))[
+                      'total'] or 0
+        expenses = transactions.filter(transaction_type=Transaction.Types.EXPENSE).aggregate(total=Sum('amount'))[
+                       'total'] or 0
+
+        balance = incomes - expenses
+
+        return Response({
+            "incomes": incomes,
+            "expenses": expenses,
+            "balance": balance
+        })

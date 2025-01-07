@@ -7,7 +7,7 @@ def home(request):
             {'name': 'Admin', 'url': '/admin/'},
             {'name': 'Login', 'url': '/api-auth/login/'},
             {'name': 'Transactions', 'url': '/transactions/'},
-            {'name': 'Users', 'url': '/user-info/'},
+            {'name': 'Users', 'url': '/users/me/'},
             {'name': 'Savings', 'url': '/savings/'},
         ]
     })
