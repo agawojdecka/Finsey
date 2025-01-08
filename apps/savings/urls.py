@@ -1,15 +1,9 @@
-from django.urls import path
+from rest_framework import routers
 
-from .views import (
-    SavingListCreateView,
-    SavingDetailView,
-    GoalListCreateView,
-    GoalDetailView,
-)
+from apps.savings.views import SavingModelViewSet, GoalModelViewSet
 
-urlpatterns = [
-    path("", SavingListCreateView.as_view(), name="saving-list-create"),
-    path("<int:pk>/", SavingDetailView.as_view(), name="saving-detail"),
-    path("goals/", GoalListCreateView.as_view(), name="goal-list-create"),
-    path("goals/<int:pk>/", GoalDetailView.as_view(), name="goal-detail"),
-]
+router = routers.SimpleRouter()
+router.register('goals', GoalModelViewSet)
+router.register('', SavingModelViewSet)
+
+urlpatterns = router.urls
