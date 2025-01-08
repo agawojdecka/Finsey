@@ -8,11 +8,6 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    replaces = [
-        ('transactions', '0001_initial'),
-        ('transactions', '0002_alter_category_user_alter_transaction_user'),
-    ]
-
     initial = True
 
     dependencies = [

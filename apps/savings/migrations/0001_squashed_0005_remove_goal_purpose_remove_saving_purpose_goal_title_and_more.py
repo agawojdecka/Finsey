@@ -8,14 +8,6 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    replaces = [
-        ('savings', '0001_initial'),
-        ('savings', '0002_remove_purpose_operation_type'),
-        ('savings', '0003_purpose_description'),
-        ('savings', '0004_goal'),
-        ('savings', '0005_remove_goal_purpose_remove_saving_purpose_goal_title_and_more'),
-    ]
-
     initial = True
 
     dependencies = [
