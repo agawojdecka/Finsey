@@ -51,3 +51,8 @@ class SavingSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         return SavingReadSerializer(instance).data
+
+
+class GoalProgressSerializer(serializers.Serializer):
+    monthly_savings = serializers.DecimalField(max_digits=10, decimal_places=2)
+    goal_id = serializers.IntegerField()
