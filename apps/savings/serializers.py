@@ -13,8 +13,9 @@ class GoalSerializer(serializers.ModelSerializer):
             "amount",
             "user",
             "description",
+            "is_completed"
         ]
-        read_only_fields = ["id", "user"]
+        read_only_fields = ["id", "user", "is_completed"]
 
 
 class SavingReadSerializer(serializers.ModelSerializer):

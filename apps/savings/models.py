@@ -22,6 +22,10 @@ class Saving(models.Model):
         sign = "+" if self.operation_type == self.Types.INFLOW else "-"
         return f"{sign}{self.amount} {self.goal}"
 
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        if self.goal:
+            self.goal.update_completion_status()
 
 class Goal(models.Model):
     title = models.CharField(max_length=255, blank=True, null=True)
@@ -29,6 +33,16 @@ class Goal(models.Model):
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="goals")
     description = models.TextField(blank=True, null=True)
+    is_completed = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.amount} {self.title}"
+
+    def update_completion_status(self):
+        total_saved = sum(
+            saving.amount for saving in self.savings.filter(operation_type=Saving.Types.INFLOW)
+        ) - sum(
+            saving.amount for saving in self.savings.filter(operation_type=Saving.Types.OUTFLOW)
+        )
+        self.is_completed = total_saved >= self.amount
+        self.save()
