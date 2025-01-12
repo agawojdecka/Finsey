@@ -2,6 +2,7 @@ from datetime import date
 
 from django.db import models
 
+from apps.savings.services.total_saved import calculate_total_saved
 from apps.users.models import User
 
 
@@ -27,6 +28,7 @@ class Saving(models.Model):
         if self.goal:
             self.goal.update_completion_status()
 
+
 class Goal(models.Model):
     title = models.CharField(max_length=255, blank=True, null=True)
     target_date = models.DateField(blank=True, null=True)
@@ -39,10 +41,6 @@ class Goal(models.Model):
         return f"{self.amount} {self.title}"
 
     def update_completion_status(self):
-        total_saved = sum(
-            saving.amount for saving in self.savings.filter(operation_type=Saving.Types.INFLOW)
-        ) - sum(
-            saving.amount for saving in self.savings.filter(operation_type=Saving.Types.OUTFLOW)
-        )
+        total_saved = calculate_total_saved(self)
         self.is_completed = total_saved >= self.amount
         self.save()

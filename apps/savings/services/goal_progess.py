@@ -1,12 +1,8 @@
-from apps.savings.models import Saving
+from apps.savings.services.total_saved import calculate_total_saved
 
 
 def calculate_goal_progress(goal, monthly_savings):
-    total_saved = sum(
-        saving.amount for saving in goal.savings.filter(operation_type=Saving.Types.INFLOW)
-    ) - sum(
-        saving.amount for saving in goal.savings.filter(operation_type=Saving.Types.OUTFLOW)
-    )
+    total_saved = calculate_total_saved(goal)
 
     remaining_amount = goal.amount - total_saved
 
