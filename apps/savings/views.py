@@ -15,7 +15,7 @@ class SavingModelViewSet(ModelViewSet):
     queryset = Saving.objects.all()
     serializer_class = SavingSerializer
     filter_backends = [DjangoFilterBackend]
-    filter_class = SavingFilter
+    filterset_class = SavingFilter
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):

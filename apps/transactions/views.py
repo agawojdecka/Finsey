@@ -14,7 +14,7 @@ class TransactionModelViewSet(ModelViewSet):
     queryset = Transaction.objects.all()
     serializer_class = TransactionSerializer
     filter_backends = [DjangoFilterBackend]
-    filter_class = TransactionFilter
+    filterset_class = TransactionFilter
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
