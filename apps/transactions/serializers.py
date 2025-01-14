@@ -1,5 +1,6 @@
 from rest_framework import serializers
 
+from apps.transactions.services.report import AVAILABLE_REPORT_FIELDS
 from .models import Transaction, Category
 
 
@@ -59,3 +60,7 @@ class TransactionSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         return TransactionReadSerializer(instance).data
+
+
+class ColumnsListSerializer(serializers.Serializer):
+    selected_columns = serializers.ListField(child=serializers.ChoiceField(choices=AVAILABLE_REPORT_FIELDS))
