@@ -149,10 +149,4 @@ CELERY_BROKER_URL = f'redis://{REDIS_HOST}:6379/0'  # Redis URL
 CELERY_ACCEPT_CONTENT = ['json']  # Accepted content types
 CELERY_TASK_SERIALIZER = 'json'  # Serializer format
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'your_email@gmail.com'  # Replace with your email
-EMAIL_HOST_PASSWORD = 'your_password'  # Replace with your email password
-DEFAULT_FROM_EMAIL = 'your_email@gmail.com'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
