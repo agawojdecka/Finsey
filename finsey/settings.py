@@ -144,7 +144,8 @@ REST_FRAMEWORK = {
 AUTH_USER_MODEL = "users.User"
 
 # Celery settings
-CELERY_BROKER_URL = 'redis://redis:6379/0'  # Redis URL
+REDIS_HOST = os.getenv('REDIS_HOST', 'localhost')
+CELERY_BROKER_URL = f'redis://{REDIS_HOST}:6379/0'  # Redis URL
 CELERY_ACCEPT_CONTENT = ['json']  # Accepted content types
 CELERY_TASK_SERIALIZER = 'json'  # Serializer format
 

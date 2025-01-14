@@ -17,6 +17,7 @@ services:
       - DB_PASSWORD=1234  # Database password
       - DB_HOST=db  # PostgreSQL service name
       - DB_PORT=5432  # PostgreSQL default port
+      - REDIS_HOST=redis
     depends_on:
       - db  # Ensure PostgreSQL is up before Django
       - redis
@@ -42,6 +43,8 @@ services:
       - DB_PASSWORD=1234  # Database password
       - DB_HOST=db  # PostgreSQL service name
       - DB_PORT=5432  # PostgreSQL default port
+      - REDIS_HOST=redis
+
   celery-beat:
     build: .
     command: celery -A finsey beat -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler
@@ -57,6 +60,7 @@ services:
       - DB_PASSWORD=1234  # Database password
       - DB_HOST=db  # PostgreSQL service name
       - DB_PORT=5432  # PostgreSQL default port
+      - REDIS_HOST=redis
   db:
     image: postgres:13  # Use the official PostgreSQL image
     container_name: postgres_db
