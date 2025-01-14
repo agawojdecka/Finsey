@@ -6,7 +6,7 @@ from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 
 from apps.transactions.services.balance import get_balance
-from apps.transactions.tasks import create_report, send_mail_with_report
+from apps.transactions.tasks import generate_and_send_report_task
 from .filters import TransactionFilter
 from .models import Transaction, Category
 from .serializers import TransactionSerializer, CategorySerializer, ColumnsListSerializer
@@ -56,16 +56,8 @@ class GetReportView(APIView):
         serializer = ColumnsListSerializer(data=request.data)
         if serializer.is_valid():
             selected_columns = serializer.validated_data['selected_columns']
-            create_report.delay(user_id=self.request.user.id, selected_columns=selected_columns)
+            generate_and_send_report_task.delay(user_id=self.request.user.id, selected_columns=selected_columns)
 
-            return Response({'message': "Task submitted"})
+            return Response({'message': "Report has been sent."})
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-class SendEmailView(APIView):
-    permission_classes = [IsAuthenticated]
-
-    def get(self, request):
-        send_mail_with_report.delay()
-        return Response({'message': "Email sent"})

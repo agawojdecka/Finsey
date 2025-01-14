@@ -1,3 +1,4 @@
+from django.core.mail import EmailMessage
 from xlsxwriter import Workbook
 
 from apps.transactions.models import Transaction
@@ -15,7 +16,8 @@ AVAILABLE_REPORT_FIELDS = [
 ]
 
 
-def generate_report(user_id, selected_columns):
+def generate_and_send_report(user_id, selected_columns):
+    # 1 - generate report
     user = User.objects.get(id=user_id)
 
     wb = Workbook(f'Report.xlsx')
@@ -34,3 +36,19 @@ def generate_report(user_id, selected_columns):
             ws.write(row_num, col_num, str(value) if value else '')
 
     wb.close()
+
+    # 2 - send email
+    subject = 'Report of transactions'
+    body = 'This is a report of your transactions.'
+    from_email = 'your-email@gmail.com'
+    to_email = ['recipient@example.com']
+
+    email = EmailMessage(subject, body, from_email, to_email)
+
+    file_path = 'Report.xlsx'
+    try:
+        email.attach_file(file_path)
+        email.send(fail_silently=False)
+        print("Email sent successfully with attachment!")
+    except Exception as e:
+        print(f"Failed to send email: {e}")
