@@ -16,6 +16,10 @@ app.autodiscover_tasks()
 app.conf.beat_schedule = {
     'test-beat': {
         'task': 'apps.users.tasks.test_celery_beat',
-        'schedule': crontab(minute='0', hour='*', day_of_week='1')
+        'schedule': crontab(minute='0', hour='8', day_of_week='1')
     },
+    'send_inactivity_notification_task': {
+        'task': 'apps.users.tasks.send_inactivity_notification_task',
+        'schedule': crontab(minute='0', hour='8', day_of_week='1')
+    }
 }
