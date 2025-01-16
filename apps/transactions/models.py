@@ -20,7 +20,7 @@ class Transaction(models.Model):
     description = models.TextField(blank=True, null=True)
     is_constant = models.BooleanField(default=False)
     user = models.ForeignKey(
-        User, on_delete=models.CASCADE, null=True, related_name="transactions"
+        User, on_delete=models.CASCADE, related_name="transactions"
     )
 
     def __str__(self):
