@@ -22,7 +22,7 @@ class TransactionReadSerializer(serializers.ModelSerializer):
     class Meta:
         model = Transaction
         fields = [
-            "id",  # Including `id` to identify transactions
+            "id",
             "title",
             "transaction_type",
             "amount",
@@ -39,7 +39,7 @@ class TransactionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Transaction
         fields = [
-            "id",  # Including `id` to identify transactions
+            "id",
             "title",
             "transaction_type",
             "amount",
