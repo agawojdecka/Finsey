@@ -36,6 +36,7 @@ class Goal(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="goals")
     description = models.TextField(blank=True, null=True)
     is_completed = models.BooleanField(default=False)
+    notification_sent = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.amount} {self.title}"
