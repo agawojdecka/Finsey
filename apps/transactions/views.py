@@ -6,7 +6,7 @@ from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 
 from apps.transactions.services.balance import get_balance
-from apps.transactions.tasks import generate_and_send_report_task
+from apps.transactions.tasks import generate_and_send_report_task, generate_monthly_expense_report_task
 from .filters import TransactionFilter
 from .models import Transaction, Category
 from .serializers import TransactionSerializer, CategorySerializer, ColumnsListSerializer
@@ -61,3 +61,11 @@ class GetReportView(APIView):
             return Response({'message': "Report has been sent."})
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class GetMonthlyExpenseReportView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        generate_monthly_expense_report_task.delay(user_id=self.request.user.id)
+        return Response({'message': "Monthly expense report has been generated."})

@@ -1,4 +1,5 @@
 from django.core.mail import EmailMessage
+from django.utils.timezone import now
 from xlsxwriter import Workbook
 
 from apps.transactions.models import Transaction
@@ -52,3 +53,34 @@ def generate_and_send_report(user_id, selected_columns):
         print("Email sent successfully with attachment!")
     except Exception as e:
         print(f"Failed to send email: {e}")
+
+
+def generate_monthly_expense_report(user_id):
+    user = User.objects.get(id=user_id)
+
+    wb = Workbook(f'Monthly_expense_report.xlsx')
+    ws = wb.add_worksheet()
+
+    for col_num, column in enumerate(AVAILABLE_REPORT_FIELDS):
+        ws.write(0, col_num, column)
+
+    current_date = now()
+    current_year = current_date.year
+    current_month = current_date.month
+
+    transactions = Transaction.objects.filter(user=user, transaction_type='EXPENSE', date__month=current_month,
+                                              date__year=current_year)
+
+    for row_num, transaction in enumerate(transactions, start=1):
+        for col_num, column in enumerate(AVAILABLE_REPORT_FIELDS):
+            value = getattr(transaction, column)
+            ws.write(row_num, col_num, str(value) if value else '')
+
+    total_amount = sum(transaction.amount for transaction in transactions)
+
+    last_row = len(transactions) + 1
+    amount_col_index = AVAILABLE_REPORT_FIELDS.index('amount')
+    ws.write(last_row, 0, 'Total expenses')
+    ws.write(last_row, amount_col_index, total_amount)
+
+    wb.close()
