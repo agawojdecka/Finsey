@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     "apps.users",
     "apps.savings",
     "apps.home",
+    "apps.core",
 ]
 
 MIDDLEWARE = [
@@ -115,7 +116,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = "UTC"
+TIME_ZONE='CET'
 
 USE_I18N = True
 
