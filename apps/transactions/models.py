@@ -16,7 +16,7 @@ class Transaction(models.Model):
     category = models.ForeignKey(
         "Category", on_delete=models.SET_NULL, null=True, related_name="transactions"
     )
-    date = models.DateField(default=date.today, blank=True)
+    date = models.DateField(default=date.today, blank=True, db_index=True)
     description = models.TextField(blank=True, null=True)
     is_constant = models.BooleanField(default=False)
     user = models.ForeignKey(
