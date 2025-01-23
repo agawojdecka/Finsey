@@ -4,13 +4,14 @@ from apps.savings.models import Goal
 
 
 def send_goal_achievement_notification():
-    goals = list(Goal.objects.filter(is_completed=True, notification_sent=False))
+    goals = list(Goal.objects.select_related('user').filter(is_completed=True, notification_sent=False))
 
     for goal in goals:
-        subject = f"Goal Achievement - user ID: {goal.user.id}"
+        user = goal.user
+        subject = f"Goal Achievement - user ID: {user.id}"
         body = f"Congratulations! You have achieved your goal: {goal.title}"
         from_email = "your-email@gmail.com"
-        to_email = [goal.user.email]
+        to_email = [user.email]
 
         email = EmailMessage(subject, body, from_email, to_email)
 
