@@ -56,7 +56,7 @@ def generate_and_send_report(user_id, selected_columns):
 
 
 def generate_monthly_expense_report(user_id):
-    user = User.objects.prefetch_related('transactions').get(id=user_id)
+    user = User.objects.get(id=user_id)
 
     wb = Workbook(f'Monthly_expense_report.xlsx')
     ws = wb.add_worksheet()
@@ -68,7 +68,7 @@ def generate_monthly_expense_report(user_id):
     current_year = current_date.year
     current_month = current_date.month
 
-    transactions = user.transactions.filter(user=user, transaction_type='EXPENSE', date__month=current_month,
+    transactions = Transaction.objects.filter(user=user, transaction_type='EXPENSE', date__month=current_month,
                                               date__year=current_year)
 
     for row_num, transaction in enumerate(transactions, start=1):
