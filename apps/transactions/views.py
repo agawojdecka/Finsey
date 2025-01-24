@@ -1,3 +1,4 @@
+from django.utils import timezone
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
@@ -5,11 +6,13 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 
-from apps.transactions.services.balance import get_balance
-from apps.transactions.tasks import generate_and_send_report_task, generate_monthly_expense_report_task
+from apps.savings.models import Saving
 from apps.transactions.filters import TransactionFilter
 from apps.transactions.models import Transaction, Category
-from apps.transactions.serializers import TransactionSerializer, CategorySerializer, ColumnsListSerializer, TransactionToSavingSerializer
+from apps.transactions.serializers import TransactionSerializer, CategorySerializer, ColumnsListSerializer, \
+    TransactionToSavingSerializer
+from apps.transactions.services.balance import get_balance
+from apps.transactions.tasks import generate_and_send_report_task, generate_monthly_expense_report_task
 
 
 class TransactionModelViewSet(ModelViewSet):
@@ -75,11 +78,14 @@ class TransactionToSavingView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
-        return Response({'message': "Saving has been added."})
-
-
-        # serializer = TransactionToSavingSerializer(data=request.data)
-        # if serializer.is_valid():
-        #     saving = Saving.objects.create(operation_type="INFLOW", amount=serializer.validated_data['amount'], user=self.request.user)
-        #     saving.save()
-        #     return Response({'message': "Saving has been added."})
+        serializer = TransactionToSavingSerializer(data=request.data)
+        if serializer.is_valid():
+            user = self.request.user
+            now = timezone.now().date()
+            amount = serializer.validated_data['amount']
+            transaction = Transaction.objects.create(title="Saving", transaction_type="EXPENSE", amount=amount,
+                                                     date=now, user=user)
+            saving = Saving.objects.create(operation_type="INFLOW", amount=amount, date=now, user=user)
+            transaction.save()
+            saving.save()
+            return Response({'message': "Saving has been added."})

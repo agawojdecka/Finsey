@@ -47,6 +47,7 @@ class TransactionSerializer(serializers.ModelSerializer):
             "date",
             "description",
             "is_constant",
+            "user",
         ]
         read_only_fields = ["id", "user"]
 
@@ -64,3 +65,11 @@ class TransactionSerializer(serializers.ModelSerializer):
 
 class ColumnsListSerializer(serializers.Serializer):
     selected_columns = serializers.ListField(child=serializers.ChoiceField(choices=AVAILABLE_REPORT_FIELDS))
+
+
+class TransactionToSavingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Transaction
+        fields = [
+            "amount",
+        ]
