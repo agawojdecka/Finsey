@@ -7,9 +7,9 @@ from rest_framework.viewsets import ModelViewSet
 
 from apps.transactions.services.balance import get_balance
 from apps.transactions.tasks import generate_and_send_report_task, generate_monthly_expense_report_task
-from .filters import TransactionFilter
-from .models import Transaction, Category
-from .serializers import TransactionSerializer, CategorySerializer, ColumnsListSerializer
+from apps.transactions.filters import TransactionFilter
+from apps.transactions.models import Transaction, Category
+from apps.transactions.serializers import TransactionSerializer, CategorySerializer, ColumnsListSerializer, TransactionToSavingSerializer
 
 
 class TransactionModelViewSet(ModelViewSet):
@@ -69,3 +69,17 @@ class GetMonthlyExpenseReportView(APIView):
     def post(self, request):
         generate_monthly_expense_report_task.delay(user_id=self.request.user.id)
         return Response({'message': "Monthly expense report has been generated."})
+
+
+class TransactionToSavingView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        return Response({'message': "Saving has been added."})
+
+
+        # serializer = TransactionToSavingSerializer(data=request.data)
+        # if serializer.is_valid():
+        #     saving = Saving.objects.create(operation_type="INFLOW", amount=serializer.validated_data['amount'], user=self.request.user)
+        #     saving.save()
+        #     return Response({'message': "Saving has been added."})
