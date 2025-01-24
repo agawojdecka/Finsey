@@ -1,7 +1,7 @@
 from celery import shared_task
 
-from apps.transactions.services.report import generate_and_send_report, generate_monthly_expense_report
 from apps.transactions.services.notifications import send_monthly_balance_notification
+from apps.transactions.services.report import generate_and_send_report, generate_monthly_expense_report
 
 
 @shared_task

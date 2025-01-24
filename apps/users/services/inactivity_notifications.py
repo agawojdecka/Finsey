@@ -1,5 +1,7 @@
 from django.core.mail import EmailMessage
+
 from apps.users.models import User
+
 
 def send_inactivity_notification(user):
     subject = f"Inactivity Notification - user ID: {user.id}"
