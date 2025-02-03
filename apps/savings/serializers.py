@@ -32,7 +32,7 @@ class SavingReadSerializer(serializers.ModelSerializer):
             "date",
             "description",
         ]
-        read_only_fields = ["id", "user"]
+        read_only_fields = fields
 
 
 class SavingSerializer(serializers.ModelSerializer):
