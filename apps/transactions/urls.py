@@ -5,8 +5,8 @@ from .views import TransactionModelViewSet, CategoryModelViewSet, GetBalanceView
     GetMonthlyExpenseReportView, TransactionToSavingView
 
 router = routers.SimpleRouter()
-router.register('categories', CategoryModelViewSet)
-router.register('', TransactionModelViewSet)
+router.register('categories', CategoryModelViewSet, basename='categories')
+router.register('', TransactionModelViewSet, basename='transactions')
 
 urlpatterns = [
                   path("balance/", GetBalanceView.as_view(), name="balance-detail"),

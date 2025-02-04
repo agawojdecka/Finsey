@@ -16,7 +16,6 @@ from apps.transactions.tasks import generate_and_send_report_task, generate_mont
 
 
 class TransactionModelViewSet(ModelViewSet):
-    queryset = Transaction.objects.all()
     serializer_class = TransactionSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_class = TransactionFilter
@@ -30,12 +29,11 @@ class TransactionModelViewSet(ModelViewSet):
 
 
 class CategoryModelViewSet(ModelViewSet):
-    queryset = Category.objects.all()
     serializer_class = CategorySerializer
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return Transaction.objects.filter(
+        return Category.objects.filter(
             user=self.request.user
         )
 

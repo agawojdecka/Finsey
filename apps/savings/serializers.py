@@ -13,7 +13,8 @@ class GoalSerializer(serializers.ModelSerializer):
             "amount",
             "user",
             "description",
-            "is_completed"
+            "is_completed",
+            "notification_sent",
         ]
         read_only_fields = ["id", "user", "is_completed", "notification_sent"]
 
