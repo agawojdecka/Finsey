@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     "apps.home",
     "apps.core",
     "apps.accounts",
+    "apps.documents",
 ]
 
 MIDDLEWARE = [
