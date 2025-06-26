@@ -27,4 +27,5 @@ urlpatterns = [
     path("transactions/", include("apps.transactions.urls")),
     path("users/", include("apps.users.urls")),
     path("savings/", include("apps.savings.urls")),
+    path("accounts/", include("apps.accounts.urls")),
 ]
