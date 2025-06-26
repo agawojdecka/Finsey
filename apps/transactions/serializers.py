@@ -9,6 +9,7 @@ class CategorySerializer(serializers.ModelSerializer):
         model = Category
         fields = [
             "id",
+            "account",
             "title",
             "transaction_type",
             "user"
@@ -23,6 +24,7 @@ class TransactionReadSerializer(serializers.ModelSerializer):
         model = Transaction
         fields = [
             "id",
+            "account",
             "title",
             "transaction_type",
             "amount",
@@ -40,6 +42,7 @@ class TransactionSerializer(serializers.ModelSerializer):
         model = Transaction
         fields = [
             "id",
+            "account",
             "title",
             "transaction_type",
             "amount",
@@ -61,6 +64,17 @@ class TransactionSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         return TransactionReadSerializer(instance).data
+
+    def validate(self, attrs):
+        account = attrs.get("account")
+        category = attrs.get("category")
+
+        if category and account and category.account != account:
+            raise serializers.ValidationError({
+                "category": "The selected category does not belong to the specified account."
+            })
+
+        return attrs
 
 
 class ColumnsListSerializer(serializers.Serializer):
