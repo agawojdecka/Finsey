@@ -12,7 +12,12 @@ class AccountSerializer(serializers.ModelSerializer):
             "account_type",
             "name",
             "description",
-            "currency",
             "user",
         ]
-        read_only_fields = ["id", "account_number", "account_type", "currency", "user"]
+        read_only_fields = ["id", "user"]
+
+    def get_fields(self):
+        fields = super().get_fields()
+        if self.instance:
+            fields['account_number'].read_only = True
+        return fields
