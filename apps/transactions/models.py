@@ -2,6 +2,7 @@ from datetime import date
 
 from django.db import models
 
+from apps.accounts.models import Account
 from apps.users.models import User
 
 
@@ -10,6 +11,9 @@ class Transaction(models.Model):
         INCOME = "INCOME"
         EXPENSE = "EXPENSE"
 
+    account = models.ForeignKey(
+        Account, on_delete=models.CASCADE, null=True, blank=False, related_name="transactions"
+    )
     title = models.CharField(max_length=255)
     transaction_type = models.CharField(max_length=10, choices=Types)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
@@ -33,6 +37,9 @@ class Category(models.Model):
         INCOME = "INCOME"
         EXPENSE = "EXPENSE"
 
+    account = models.ForeignKey(
+        Account, on_delete=models.CASCADE, null=True, blank=False, related_name="categories"
+    )
     title = models.CharField(max_length=255)
     transaction_type = models.CharField(max_length=10, choices=Types)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name="categories")
