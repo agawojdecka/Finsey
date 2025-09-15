@@ -1,31 +1,14 @@
 import pytest
 from django.utils import timezone
 from rest_framework import status
-from rest_framework.authtoken.models import Token
 from rest_framework.test import APIClient
 
 from apps.savings.models import Saving
 from apps.users.models import User
 
 
-@pytest.fixture
-def test_user():
-    user = User.objects.create_user(username='test', password='1234')
-    return user
-
-
-@pytest.fixture
-def test_client(test_user):
-    token = Token.objects.create(user=test_user)
-
-    client = APIClient()
-    client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
-
-    return client
-
-
 @pytest.mark.django_db
-def test_create_saving(test_client, test_user):
+def test_create_saving(test_client: APIClient, test_user: User) -> None:
     data = {
         "operation_type": "INFLOW",
         "amount": 100,
@@ -49,7 +32,7 @@ def test_create_saving(test_client, test_user):
 
 
 @pytest.mark.django_db
-def test_get_savings_list(test_client):
+def test_get_savings_list(test_client: APIClient) -> None:
     response = test_client.get("/savings/")
 
     assert response.status_code == status.HTTP_200_OK

@@ -9,7 +9,7 @@ from apps.transactions.models import Transaction
 from apps.users.models import User
 
 
-def send_monthly_balance_notification():
+def send_monthly_balance_notification() -> None:
     current_date = timezone.now().date()
 
     last_day_of_settlement_period = get_first_day_of_month(current_date) - timedelta(days=1)
@@ -18,24 +18,30 @@ def send_monthly_balance_notification():
     users = User.objects.prefetch_related('transactions').all()
 
     for user in users:
-        transactions = user.transactions.filter(user=user, date__gte=first_day_of_settlement_period,
-                                                date__lte=last_day_of_settlement_period)
-        monthly_incomes = \
-            transactions.filter(transaction_type=Transaction.Types.INCOME).aggregate(total=Sum('amount'))[
-                'total'] or 0
-        monthly_expenses = \
-            transactions.filter(transaction_type=Transaction.Types.EXPENSE).aggregate(total=Sum('amount'))[
-                'total'] or 0
+        transactions = user.transactions.filter(
+            user=user,
+            date__gte=first_day_of_settlement_period,
+            date__lte=last_day_of_settlement_period,
+        )
+        monthly_incomes = (
+            transactions.filter(transaction_type=Transaction.Types.INCOME).aggregate(total=Sum('amount'))['total'] or 0
+        )
+        monthly_expenses = (
+            transactions.filter(transaction_type=Transaction.Types.EXPENSE).aggregate(total=Sum('amount'))['total'] or 0
+        )
         monthly_balance = monthly_incomes - monthly_expenses
 
         if monthly_balance > 0:
-            subject = f"Congratulations, you have reached a positive monthly balance!"
+            subject = "Congratulations, you have reached a positive monthly balance!"
         elif monthly_balance == 0:
-            subject = f"After all the expenses, we managed to break even!"
+            subject = "After all the expenses, we managed to break even!"
         else:
-            subject = f"Oops! Your monthly balance is below zero..."
+            subject = "Oops! Your monthly balance is below zero..."
 
-        body = f"Your monthly balance for period {first_day_of_settlement_period} - {last_day_of_settlement_period} is {monthly_balance}."
+        body = (
+            f"Your monthly balance for period {first_day_of_settlement_period} "
+            f"- {last_day_of_settlement_period} is {monthly_balance}."
+        )
         from_email = "your-email@gmail.com"
         to_email = [user.email]
 

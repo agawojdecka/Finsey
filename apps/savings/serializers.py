@@ -1,6 +1,8 @@
+from typing import Any
+
 from rest_framework import serializers
 
-from apps.savings.models import Saving, Goal
+from apps.savings.models import Goal, Saving
 
 
 class GoalSerializer(serializers.ModelSerializer):
@@ -50,7 +52,7 @@ class SavingSerializer(serializers.ModelSerializer):
         ]
         read_only_fields = ["id", "user"]
 
-    def to_representation(self, instance):
+    def to_representation(self, instance: Saving) -> Any:
         return SavingReadSerializer(instance).data
 
 

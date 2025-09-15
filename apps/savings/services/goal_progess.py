@@ -1,23 +1,28 @@
+from dataclasses import dataclass
+from decimal import Decimal
+
+from apps.savings.models import Goal
 from apps.savings.services.total_saved import calculate_total_saved
 
 
-def calculate_goal_progress(goal, monthly_savings):
+@dataclass
+class GoalProgress:
+    years_left: int
+    months_left: int
+
+
+def calculate_goal_progress(goal: Goal, monthly_savings: Decimal) -> GoalProgress:
     total_saved = calculate_total_saved(goal)
 
     remaining_amount = goal.amount - total_saved
 
     if remaining_amount <= 0:
-        return {"months_left": 0, "message": "Goal already completed."}
+        return GoalProgress(
+            years_left=0,
+            months_left=0,
+        )
 
     months_left = (remaining_amount / monthly_savings).quantize(1)
     months_left = int(months_left)
 
-    if months_left >= 12:
-        years = months_left // 12
-        months = months_left % 12
-        return {
-            "years_left": years,
-            "months_left": months
-        }
-    else:
-        return {"months_left": months_left}
+    return GoalProgress(years_left=months_left // 12, months_left=months_left % 12)

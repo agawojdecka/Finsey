@@ -14,10 +14,4 @@ class AccountSerializer(serializers.ModelSerializer):
             "description",
             "user",
         ]
-        read_only_fields = ["id", "user"]
-
-    def get_fields(self):
-        fields = super().get_fields()
-        if self.instance:
-            fields['account_number'].read_only = True
-        return fields
+        read_only_fields = ["id", "user", "account_number"]

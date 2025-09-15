@@ -1,6 +1,6 @@
 import django_filters
 
-from apps.savings.models import Saving, Goal
+from apps.savings.models import Goal, Saving
 
 
 class SavingFilter(django_filters.FilterSet):
@@ -13,7 +13,10 @@ class SavingFilter(django_filters.FilterSet):
         to_field_name="title",
         label="Goal",
     )
-    date = django_filters.DateFromToRangeFilter(field_name="date", label="Date (Range)")
+    date = django_filters.DateFromToRangeFilter(
+        field_name="date",
+        label="Date (Range)",
+    )
 
     class Meta:
         model = Saving

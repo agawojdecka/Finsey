@@ -3,8 +3,13 @@ from django.core.mail import EmailMessage
 from apps.savings.models import Goal
 
 
-def send_goal_achievement_notification():
-    goals = list(Goal.objects.select_related('user').filter(is_completed=True, notification_sent=False))
+def send_goal_achievement_notification() -> None:
+    goals = list(
+        Goal.objects.select_related('user').filter(
+            is_completed=True,
+            notification_sent=False,
+        )
+    )
 
     for goal in goals:
         user = goal.user

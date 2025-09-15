@@ -1,4 +1,5 @@
 from datetime import date
+from typing import Any
 
 from django.db import models
 
@@ -12,18 +13,23 @@ class Saving(models.Model):
         OUTFLOW = "OUTFLOW"
 
     operation_type = models.CharField(max_length=10, choices=Types)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="savings")
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="savings",
+    )
     amount = models.DecimalField(max_digits=10, decimal_places=2)
-    goal = models.ForeignKey("Goal", on_delete=models.SET_NULL, null=True,
-                             related_name="savings")  # Emergency Fund, Vacation, Car etc.
+    goal = models.ForeignKey(
+        "Goal", on_delete=models.SET_NULL, null=True, related_name="savings"
+    )  # Emergency Fund, Vacation, Car etc.
     date = models.DateField(default=date.today, blank=True)
     description = models.TextField(blank=True, null=True)
 
-    def __str__(self):
+    def __str__(self) -> str:
         sign = "+" if self.operation_type == self.Types.INFLOW else "-"
         return f"{sign}{self.amount} {self.goal}"
 
-    def save(self, *args, **kwargs):
+    def save(self, *args: Any, **kwargs: Any) -> None:
         super().save(*args, **kwargs)
         if self.goal:
             self.goal.update_completion_status()
@@ -33,15 +39,19 @@ class Goal(models.Model):
     title = models.CharField(max_length=255, blank=True, null=True)
     target_date = models.DateField(blank=True, null=True)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="goals")
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="goals",
+    )
     description = models.TextField(blank=True, null=True)
     is_completed = models.BooleanField(default=False)
     notification_sent = models.BooleanField(default=False)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.amount} {self.title}"
 
-    def update_completion_status(self):
+    def update_completion_status(self) -> None:
         total_saved = calculate_total_saved(self)
         self.is_completed = total_saved >= self.amount
         self.save()

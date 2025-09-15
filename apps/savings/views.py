@@ -1,13 +1,21 @@
+import dataclasses
+
+from django.db.models import QuerySet
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 
 from apps.savings.filters import SavingFilter
-from apps.savings.models import Saving, Goal
-from apps.savings.serializers import SavingSerializer, GoalSerializer, GoalProgressSerializer
+from apps.savings.models import Goal, Saving
+from apps.savings.serializers import (
+    GoalProgressSerializer,
+    GoalSerializer,
+    SavingSerializer,
+)
 from apps.savings.services.goal_progess import calculate_goal_progress
 
 
@@ -18,10 +26,10 @@ class SavingModelViewSet(ModelViewSet):
     filterset_class = SavingFilter
     permission_classes = [IsAuthenticated]
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet:
         return Saving.objects.filter(user=self.request.user)
 
-    def perform_create(self, serializer):
+    def perform_create(self, serializer: SavingSerializer) -> None:
         serializer.save(user=self.request.user)
 
 
@@ -30,17 +38,17 @@ class GoalModelViewSet(ModelViewSet):
     serializer_class = GoalSerializer
     permission_classes = [IsAuthenticated]
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet:
         return Goal.objects.filter(user=self.request.user)
 
-    def perform_create(self, serializer):
+    def perform_create(self, serializer: GoalSerializer) -> None:
         serializer.save(user=self.request.user)
 
 
 class GoalProgressView(APIView):
     permission_classes = [IsAuthenticated]
 
-    def post(self, request):
+    def post(self, request: Request) -> Response:
         serializer = GoalProgressSerializer(data=request.data)
         if serializer.is_valid():
             monthly_savings = serializer.validated_data['monthly_savings']
@@ -52,7 +60,8 @@ class GoalProgressView(APIView):
             except Goal.DoesNotExist:
                 return Response({"error": "Goal not found."}, status=status.HTTP_404_NOT_FOUND)
 
-            result = calculate_goal_progress(goal, monthly_savings)
-            return Response(result)
+            goal_progress = calculate_goal_progress(goal, monthly_savings)
+            goal_progress_dict = dataclasses.asdict(goal_progress)
+            return Response(goal_progress_dict)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

@@ -1,11 +1,11 @@
 import pytest
 
-from apps.savings.models import Saving, Goal
+from apps.savings.models import Goal, Saving
 from apps.users.models import User
 
 
 @pytest.mark.django_db
-def test_create_saving():
+def test_create_saving() -> None:
     saving = Saving.objects.create(
         operation_type="INFLOW",
         amount=500,
@@ -17,7 +17,7 @@ def test_create_saving():
 
 
 @pytest.mark.django_db
-def test_create_goal():
+def test_create_goal() -> None:
     goal = Goal.objects.create(
         title="Test Goal",
         amount=500,

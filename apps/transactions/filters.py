@@ -1,6 +1,6 @@
 import django_filters
 
-from apps.transactions.models import Transaction, Category
+from apps.transactions.models import Category, Transaction
 
 
 class TransactionFilter(django_filters.FilterSet):
@@ -13,7 +13,10 @@ class TransactionFilter(django_filters.FilterSet):
         to_field_name="title",
         label="Category",
     )
-    date = django_filters.DateFromToRangeFilter(field_name="date", label="Date (Range)")
+    date = django_filters.DateFromToRangeFilter(
+        field_name="date",
+        label="Date (Range)",
+    )
     is_constant = django_filters.BooleanFilter(field_name="is_constant")
 
     class Meta:

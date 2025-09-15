@@ -4,7 +4,7 @@ from apps.savings.services.notifications import send_goal_achievement_notificati
 
 
 @shared_task
-def send_goal_achievement_notification_task():
+def send_goal_achievement_notification_task() -> None:
     """
     Sends email with congratulations to all users that have achieved a goal.
     """

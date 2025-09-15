@@ -16,14 +16,14 @@ app.autodiscover_tasks()
 app.conf.beat_schedule = {
     'send_goal_achievement_notification_task': {
         'task': 'apps.savings.tasks.send_goal_achievement_notification_task',
-        'schedule': crontab(minute='0', hour='8', day_of_week='*')
+        'schedule': crontab(minute='0', hour='8', day_of_week='*'),
     },
     'send_inactivity_notification_task': {
         'task': 'apps.users.tasks.send_inactivity_notification_task',
-        'schedule': crontab(minute='0', hour='8', day_of_week='*')
+        'schedule': crontab(minute='0', hour='8', day_of_week='*'),
     },
     'send_monthly_balance_notification_task': {
         'task': 'apps.transactions.tasks.send_monthly_balance_notification_task',
-        'schedule': crontab(minute='0', hour='8', day_of_month='1')
-    }
+        'schedule': crontab(minute='0', hour='8', day_of_month='1'),
+    },
 }

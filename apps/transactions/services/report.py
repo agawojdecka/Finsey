@@ -17,11 +17,11 @@ AVAILABLE_REPORT_FIELDS = [
 ]
 
 
-def generate_and_send_report(user_id, selected_columns):
+def generate_and_send_report(user_id: int, selected_columns: list[str]) -> None:
     # 1 - generate report
     user = User.objects.get(id=user_id)
 
-    wb = Workbook(f'Report.xlsx')
+    wb = Workbook('Report.xlsx')
     ws = wb.add_worksheet()
 
     valid_columns = [column_name for column_name in selected_columns if column_name in AVAILABLE_REPORT_FIELDS]
@@ -55,10 +55,10 @@ def generate_and_send_report(user_id, selected_columns):
         print(f"Failed to send email: {e}")
 
 
-def generate_monthly_expense_report(user_id):
+def generate_monthly_expense_report(user_id: int) -> None:
     user = User.objects.get(id=user_id)
 
-    wb = Workbook(f'Monthly_expense_report.xlsx')
+    wb = Workbook('Monthly_expense_report.xlsx')
     ws = wb.add_worksheet()
 
     for col_num, column in enumerate(AVAILABLE_REPORT_FIELDS):
@@ -68,8 +68,12 @@ def generate_monthly_expense_report(user_id):
     current_year = current_date.year
     current_month = current_date.month
 
-    transactions = Transaction.objects.filter(user=user, transaction_type='EXPENSE', date__month=current_month,
-                                              date__year=current_year)
+    transactions = Transaction.objects.filter(
+        user=user,
+        transaction_type='EXPENSE',
+        date__month=current_month,
+        date__year=current_year,
+    )
 
     for row_num, transaction in enumerate(transactions, start=1):
         for col_num, column in enumerate(AVAILABLE_REPORT_FIELDS):

@@ -1,11 +1,11 @@
 import pytest
 
-from apps.transactions.models import Transaction, Category
+from apps.transactions.models import Category, Transaction
 from apps.users.models import User
 
 
 @pytest.mark.django_db
-def test_create_transaction():
+def test_create_transaction() -> None:
     transaction = Transaction.objects.create(
         title="Salary",
         transaction_type="INCOME",
@@ -19,7 +19,7 @@ def test_create_transaction():
 
 
 @pytest.mark.django_db
-def test_create_category():
+def test_create_category() -> None:
     category = Category.objects.create(
         title="Salary",
         transaction_type="INCOME",
