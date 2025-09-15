@@ -17,6 +17,7 @@ class Document(models.Model):
     user = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="documents"
     )
+    file = models.FileField(blank=True, null=True)
 
     def save(self, *args, **kwargs):
         if not self.title:
