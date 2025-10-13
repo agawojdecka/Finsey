@@ -13,32 +13,30 @@ AVAILABLE_REPORT_FIELDS = [
     "category",
     "date",
     "description",
-    "is_constant",
 ]
 
 
 def generate_and_send_report(user_id: int, selected_columns: list[str]) -> None:
-    # 1 - generate report
+    """
+    Generates an Excel report filtered by the selected valid columns
+    with all transactions of a given user, and sends it in email to the recipient.
+    """
     user = User.objects.get(id=user_id)
-
-    wb = Workbook('Report.xlsx')
-    ws = wb.add_worksheet()
 
     valid_columns = [column_name for column_name in selected_columns if column_name in AVAILABLE_REPORT_FIELDS]
 
-    for col_num, column in enumerate(valid_columns):
-        ws.write(0, col_num, column)
+    with Workbook("Report.xlsx") as wb:
+        ws = wb.add_worksheet()
 
-    transactions = Transaction.objects.filter(user=user)
-
-    for row_num, transaction in enumerate(transactions, start=1):
         for col_num, column in enumerate(valid_columns):
-            value = getattr(transaction, column)
-            ws.write(row_num, col_num, str(value) if value else '')
+            ws.write(0, col_num, column)
 
-    wb.close()
+        transactions = Transaction.objects.filter(user=user)
+        for row_num, transaction in enumerate(transactions, start=1):
+            for col_num, column in enumerate(valid_columns):
+                value = getattr(transaction, column)
+                ws.write(row_num, col_num, str(value) if value else "")
 
-    # 2 - send email
     subject = 'Report of transactions'
     body = 'This is a report of your transactions.'
     from_email = 'your-email@gmail.com'
@@ -56,13 +54,11 @@ def generate_and_send_report(user_id: int, selected_columns: list[str]) -> None:
 
 
 def generate_monthly_expense_report(user_id: int) -> None:
+    """
+    Generates an Excel report of the user's expenses for the current month,
+    including a total expense summary at the end.
+    """
     user = User.objects.get(id=user_id)
-
-    wb = Workbook('Monthly_expense_report.xlsx')
-    ws = wb.add_worksheet()
-
-    for col_num, column in enumerate(AVAILABLE_REPORT_FIELDS):
-        ws.write(0, col_num, column)
 
     current_date = now()
     current_year = current_date.year
@@ -70,21 +66,25 @@ def generate_monthly_expense_report(user_id: int) -> None:
 
     transactions = Transaction.objects.filter(
         user=user,
-        transaction_type='EXPENSE',
+        transaction_type="EXPENSE",
         date__month=current_month,
         date__year=current_year,
     )
 
-    for row_num, transaction in enumerate(transactions, start=1):
+    with Workbook("Monthly_expense_report.xlsx") as wb:
+        ws = wb.add_worksheet()
+
         for col_num, column in enumerate(AVAILABLE_REPORT_FIELDS):
-            value = getattr(transaction, column)
-            ws.write(row_num, col_num, str(value) if value else '')
+            ws.write(0, col_num, column)
 
-    total_amount = sum(transaction.amount for transaction in transactions)
+        for row_num, transaction in enumerate(transactions, start=1):
+            for col_num, column in enumerate(AVAILABLE_REPORT_FIELDS):
+                value = getattr(transaction, column)
+                ws.write(row_num, col_num, str(value) if value else "")
 
-    last_row = len(transactions) + 1
-    amount_col_index = AVAILABLE_REPORT_FIELDS.index('amount')
-    ws.write(last_row, 0, 'Total expenses')
-    ws.write(last_row, amount_col_index, total_amount)
+        total_amount = sum(transaction.amount for transaction in transactions)
+        last_row = len(transactions) + 1
+        amount_col_index = AVAILABLE_REPORT_FIELDS.index("amount")
 
-    wb.close()
+        ws.write(last_row, 0, "Total expenses")
+        ws.write(last_row, amount_col_index, total_amount)
