@@ -86,12 +86,12 @@ WSGI_APPLICATION = "finsey.wsgi.application"
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',  # Use PostgreSQL as the database engine
-        'NAME': os.getenv('DB_NAME', 'postgres_finsey'),  # Name of the database
-        'USER': os.getenv('DB_USER', 'postgres'),  # Username for PostgreSQL
-        'PASSWORD': os.getenv('DB_PASSWORD', '1234'),  # Password for PostgreSQL user
-        'HOST': os.getenv('DB_HOST', 'localhost'),  # Host is the name of the service in Docker Compose
-        'PORT': os.getenv('DB_PORT', '5432'),  # Default PostgreSQL port
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.getenv('DB_NAME', 'postgres_finsey'),
+        'USER': os.getenv('DB_USER', 'postgres'),
+        'PASSWORD': os.getenv('DB_PASSWORD', '1234'),
+        'HOST': os.getenv('DB_HOST', 'localhost'),
+        'PORT': os.getenv('DB_PORT', '5432'),
     }
 }
 
@@ -126,10 +126,11 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-STATIC_URL = "static/"
+STATIC_URL = "/static/"
 
-STATIC_ROOT = os.path.join(BASE_DIR, '/app/static')
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
@@ -149,9 +150,9 @@ AUTH_USER_MODEL = "users.User"
 
 # Celery settings
 REDIS_HOST = os.getenv('REDIS_HOST', 'localhost')
-CELERY_BROKER_URL = f'redis://{REDIS_HOST}:6379/0'  # Redis URL
-CELERY_ACCEPT_CONTENT = ['json']  # Accepted content types
-CELERY_TASK_SERIALIZER = 'json'  # Serializer format
+CELERY_BROKER_URL = f'redis://{REDIS_HOST}:6379/0'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 

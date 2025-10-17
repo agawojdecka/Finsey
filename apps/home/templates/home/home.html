@@ -1,13 +1,96 @@
+{% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="pl">
 <head>
-    <title>Homepage</title>
+    <meta charset="UTF-8">
+    <title>Finsey - Personal Finance Management App</title>
+    <link rel="icon" type="image/png" href="{% static 'finsey-favicon.png' %}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f8fafc;
+            color: #333;
+            margin: 0;
+            padding: 2rem;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1rem;
+        }
+        li a {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: #e5e7eb;
+            border-radius: 8px;
+            text-decoration: none;
+            color: #111;
+            font-weight: 500;
+            transition: background 0.2s, transform 0.2s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        li a:hover {
+            background: #d1d5db;
+        }
+        /* Login/Logout button styling */
+        .login-button {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: #2563eb;
+            color: white;
+            font-weight: bold;
+            border-radius: 8px;
+            text-decoration: none;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: background 0.2s, transform 0.2s;
+        }
+        .login-button:hover {
+            background: #1d4ed8;
+        }
+        /* Admin tab styling */
+        .admin-button {
+            background: #facc15;
+            color: #111;
+            font-weight: bold;
+            border: 2px solid #eab308;
+        }
+        .admin-button:hover {
+            background: #eab308;
+        }
+        /* Position login/logout button in top right */
+        .auth-top-right {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            z-index: 100;
+        }
+    </style>
 </head>
 <body>
-    <h1>Welcome to Finsey App!</h1>
+    <div style="text-align: center; margin-bottom: 1rem;">
+        <img src="{% static 'finsey-logo.png' %}" alt="Finsey Logo" style="width: 400px; height: auto;">
+    </div>
+    <div class="auth-top-right">
+        {% if user.is_authenticated %}
+            <a class="login-button" href="/api-auth/logout/">🚪 Logout</a>
+        {% else %}
+            <a class="login-button" href="/api/login-jwt/">🔐 Login</a>
+        {% endif %}
+    </div>
     <ul>
         {% for link in links %}
-            <li><a href="{{ link.url }}">{{ link.name }}</a></li>
+            {% if link.name == "Admin" %}
+                <li><a class="admin-button" href="{{ link.url }}">{{ link.name }}</a></li>
+            {% else %}
+                <li><a href="{{ link.url }}">{{ link.name }}</a></li>
+            {% endif %}
         {% endfor %}
     </ul>
 </body>
