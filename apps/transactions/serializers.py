@@ -1,11 +1,13 @@
+from datetime import date
 from decimal import Decimal
 from typing import Any
 
+from django.utils import timezone
 from rest_framework import serializers
 
 from apps.transactions.services.report import AVAILABLE_REPORT_FIELDS
 
-from .models import Category, Transaction
+from .models import Category, PlannedTransaction, Transaction
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -29,7 +31,6 @@ class TransactionReadSerializer(serializers.ModelSerializer):
             "category",
             "date",
             "description",
-            "is_constant",
             "user",
         ]
         read_only_fields = ["id", "user"]
@@ -47,8 +48,8 @@ class TransactionSerializer(serializers.ModelSerializer):
             "category",
             "date",
             "description",
-            "is_constant",
             "user",
+            "created_at",
         ]
         read_only_fields = ["id", "user"]
 
@@ -85,3 +86,26 @@ class TransactionToSavingSerializer(serializers.ModelSerializer):
         fields = [
             "amount",
         ]
+
+
+class PlannedTransactionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PlannedTransaction
+        fields = [
+            "id",
+            "account",
+            "title",
+            "amount",
+            "category",
+            "description",
+            "is_monthly_payment",
+            "user",
+            "scheduled_at",
+            "is_executed",
+        ]
+        read_only_fields = ["id", "user", "is_executed"]
+
+        def validate_scheduled_at(self, value: date) -> date:
+            if value <= timezone.now().date():
+                raise serializers.ValidationError("Scheduled date must be after today.")
+            return value

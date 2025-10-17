@@ -28,7 +28,6 @@ def test_create_transaction(test_client: APIClient, test_user: User) -> None:
         "category": None,
         "date": timezone.now().date().isoformat(),
         "description": None,
-        "is_constant": False,
         "user": test_user.id,
     }
 
@@ -55,7 +54,6 @@ def test_get_transactions_list(test_client: APIClient, test_user: User, test_use
             "category": None,
             "date": timezone.now().date().isoformat(),
             "description": None,
-            "is_constant": False,
             "user": test_user.id,
         }
     ]

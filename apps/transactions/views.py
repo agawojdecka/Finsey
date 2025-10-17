@@ -12,10 +12,11 @@ from rest_framework.viewsets import ModelViewSet
 
 from apps.savings.models import Saving
 from apps.transactions.filters import TransactionFilter
-from apps.transactions.models import Category, Transaction
+from apps.transactions.models import Category, PlannedTransaction, Transaction
 from apps.transactions.serializers import (
     CategorySerializer,
     ColumnsListSerializer,
+    PlannedTransactionSerializer,
     TransactionSerializer,
     TransactionToSavingSerializer,
 )
@@ -108,3 +109,14 @@ class TransactionToSavingView(APIView):
             transaction.save()
             saving.save()
             return Response({'message': "Saving has been added."})
+
+
+class PlannedTransactionViewSet(ModelViewSet):
+    serializer_class = PlannedTransactionSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self) -> QuerySet:
+        return PlannedTransaction.objects.filter(user=self.request.user)
+
+    def perform_create(self, serializer: PlannedTransactionSerializer) -> None:
+        serializer.save(user=self.request.user)

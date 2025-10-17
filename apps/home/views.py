@@ -11,7 +11,6 @@ def home(request: WSGIRequest) -> HttpResponse:
         {
             'links': [
                 {'name': 'Admin', 'url': '/admin/'},
-                {'name': 'Login', 'url': '/api-auth/login/'},
                 {'name': 'Categories', 'url': '/transactions/categories/'},
                 {'name': 'Transactions', 'url': '/transactions/'},
                 {'name': 'Users', 'url': '/users/me/'},

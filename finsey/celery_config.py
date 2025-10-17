@@ -26,4 +26,8 @@ app.conf.beat_schedule = {
         'task': 'apps.transactions.tasks.send_monthly_balance_notification_task',
         'schedule': crontab(minute='0', hour='8', day_of_month='1'),
     },
+    'execute_planned_transactions_task': {
+        'task': 'apps.transactions.tasks.execute_planned_transactions_task',
+        'schedule': crontab(minute='0', hour='8', day_of_week='*'),
+    },
 }

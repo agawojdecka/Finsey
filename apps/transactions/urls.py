@@ -6,12 +6,14 @@ from .views import (
     GetBalanceView,
     GetMonthlyExpenseReportView,
     GetReportView,
+    PlannedTransactionViewSet,
     TransactionModelViewSet,
     TransactionToSavingView,
 )
 
 router = routers.SimpleRouter()
 router.register('categories', CategoryModelViewSet, basename='categories')
+router.register('plan', PlannedTransactionViewSet, basename='planned_transactions')
 router.register('', TransactionModelViewSet, basename='transactions')
 
 urlpatterns = [

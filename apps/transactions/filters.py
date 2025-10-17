@@ -17,8 +17,7 @@ class TransactionFilter(django_filters.FilterSet):
         field_name="date",
         label="Date (Range)",
     )
-    is_constant = django_filters.BooleanFilter(field_name="is_constant")
 
     class Meta:
         model = Transaction
-        fields = ["transaction_type", "category", "date", "is_constant"]
+        fields = ["transaction_type", "category", "date"]
