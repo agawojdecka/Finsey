@@ -10,6 +10,11 @@ from apps.users.models import User
 
 
 def send_monthly_balance_notification() -> None:
+    """
+    Calculates each user's incomes and expenses for the previous month,
+    determines their balance, and emails a summary notification with
+    an appropriate message based on the result.
+    """
     current_date = timezone.now().date()
 
     last_day_of_settlement_period = get_first_day_of_month(current_date) - timedelta(days=1)

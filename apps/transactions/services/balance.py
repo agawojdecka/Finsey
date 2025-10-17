@@ -14,6 +14,9 @@ class BalanceInfo:
 
 
 def get_balance(user: User) -> BalanceInfo:
+    """
+    Returns balance of all incomes and outcomes for given user.
+    """
     transactions = Transaction.objects.filter(user=user)
     income_sum = (
         transactions.filter(transaction_type=Transaction.Types.INCOME).aggregate(total=Sum('amount'))['total'] or 0
