@@ -17,11 +17,14 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import include, path
+from rest_framework_simplejwt.views import TokenRefreshView
 
-from apps.home.views import home
+from apps.home.views import home, login_jwt
 
 urlpatterns = [
     path('', home, name='home'),
+    path('api/login-jwt/', login_jwt, name='login_jwt'),
+    path('api/refresh-jwt/', TokenRefreshView.as_view(), name='refresh-jwt'),
     path("admin/", admin.site.urls),
     path("api-auth/", include("rest_framework.urls")),
     path("transactions/", include("apps.transactions.urls")),

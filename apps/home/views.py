@@ -1,6 +1,7 @@
+from django.contrib.auth import authenticate, login
 from django.core.handlers.wsgi import WSGIRequest
-from django.http import HttpResponse
-from django.shortcuts import render
+from django.http import HttpRequest, HttpResponse
+from django.shortcuts import redirect, render
 
 
 def home(request: WSGIRequest) -> HttpResponse:
@@ -21,3 +22,20 @@ def home(request: WSGIRequest) -> HttpResponse:
             ]
         },
     )
+
+
+def login_jwt(request: HttpRequest) -> HttpResponse:
+    error_message = None
+
+    if request.method == "POST":
+        username = request.POST.get("username")
+        password = request.POST.get("password")
+
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect("/")
+        else:
+            error_message = "Invalid username or password"
+
+    return render(request, "home/login.html", {"error_message": error_message})
