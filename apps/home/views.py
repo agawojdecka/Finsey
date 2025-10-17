@@ -16,6 +16,7 @@ def home(request: WSGIRequest) -> HttpResponse:
                 {'name': 'Transactions', 'url': '/transactions/'},
                 {'name': 'Users', 'url': '/users/me/'},
                 {'name': 'Savings', 'url': '/savings/'},
+                {'name': 'Savings Goals', 'url': '/savings/goals/'},
                 {'name': 'Accounts', 'url': '/accounts/'},
                 {'name': 'Documents', 'url': '/documents/'},
                 {'name': 'Balance', 'url': '/transactions/balance/'},

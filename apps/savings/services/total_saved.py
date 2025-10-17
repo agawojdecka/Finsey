@@ -5,8 +5,10 @@ from django.db.models import Sum
 if TYPE_CHECKING:
     from apps.savings.models import Goal
 
+from decimal import Decimal
 
-def calculate_total_saved(goal: "Goal") -> float:
+
+def calculate_total_saved(goal: "Goal") -> Decimal:
     from apps.savings.models import Saving
 
     total_inflow = (
@@ -29,4 +31,4 @@ def calculate_total_saved(goal: "Goal") -> float:
 
     total_saved = total_inflow - total_outflow
 
-    return total_saved
+    return Decimal(total_saved)

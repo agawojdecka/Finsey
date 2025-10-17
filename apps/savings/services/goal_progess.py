@@ -11,7 +11,10 @@ class GoalProgress:
     months_left: int
 
 
-def calculate_goal_progress(goal: Goal, monthly_savings: Decimal) -> GoalProgress:
+def calculate_goal_progress_by_monthly_savings(goal: Goal, monthly_savings: Decimal) -> GoalProgress:
+    """
+    Calculates the goal progress based on the monthly savings.
+    """
     total_saved = calculate_total_saved(goal)
 
     remaining_amount = goal.amount - total_saved
@@ -26,3 +29,22 @@ def calculate_goal_progress(goal: Goal, monthly_savings: Decimal) -> GoalProgres
     months_left = int(months_left)
 
     return GoalProgress(years_left=months_left // 12, months_left=months_left % 12)
+
+
+@dataclass
+class GoalProgressPercentage:
+    progress: Decimal
+
+
+def calculate_goal_progress_percentage(goal: Goal) -> GoalProgressPercentage:
+    """
+    Calculates the percentage goal progress based on all user savings.
+    """
+    total_saved = calculate_total_saved(goal)
+
+    try:
+        percentage_progress = Decimal(total_saved / goal.amount) * 100
+    except ZeroDivisionError:
+        percentage_progress = Decimal(0)
+
+    return GoalProgressPercentage(progress=percentage_progress)

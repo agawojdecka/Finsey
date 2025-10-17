@@ -4,11 +4,9 @@ from apps.savings.models import Goal
 
 
 def send_goal_achievement_notification() -> None:
-    goals = list(
-        Goal.objects.select_related('user').filter(
-            is_completed=True,
-            notification_sent=False,
-        )
+    goals = Goal.objects.select_related('user').filter(
+        is_completed=True,
+        notification_sent=False,
     )
 
     for goal in goals:

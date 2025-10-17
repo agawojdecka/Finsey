@@ -3,7 +3,10 @@ from decimal import Decimal
 import pytest
 
 from apps.savings.models import Goal, Saving
-from apps.savings.services.goal_progess import GoalProgress, calculate_goal_progress
+from apps.savings.services.goal_progess import (
+    GoalProgress,
+    calculate_goal_progress_by_monthly_savings,
+)
 from apps.users.models import User
 
 
@@ -25,6 +28,6 @@ def test_calculate_goal_progress() -> None:
     )
     monthly_savings = Decimal(100)
 
-    goal_progress = calculate_goal_progress(goal, monthly_savings)
+    goal_progress = calculate_goal_progress_by_monthly_savings(goal, monthly_savings)
 
     assert goal_progress == GoalProgress(years_left=1, months_left=7)
