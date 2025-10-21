@@ -2,47 +2,26 @@ from datetime import timedelta
 from logging import getLogger
 
 from django.core.mail import EmailMessage
-from django.db.models import Prefetch, Sum
-from django.utils import timezone
 
-from apps.core.utils.date import get_first_day_of_month
-from apps.transactions.models import Transaction
-from apps.users.models import User
+from apps.core.utils.date import get_current_date, get_first_day_of_month
+from apps.transactions.services.balance import get_monthly_balance_for_all_users
 
 logger = getLogger(__name__)
 
 
 def send_monthly_balance_notification() -> None:
     """
-    Calculates each user's incomes and expenses for the previous month,
-    determines their balance, and emails a summary notification with
-    an appropriate message based on the result.
+    Sends last month's balance notifications to all users
+    with appropriate message based on the result.
     """
-    current_date = timezone.now().date()
+    current_date = get_current_date()
 
     last_day_of_settlement_period = get_first_day_of_month(current_date) - timedelta(days=1)
     first_day_of_settlement_period = last_day_of_settlement_period.replace(day=1)
 
-    users = User.objects.prefetch_related(
-        Prefetch(
-            "transactions",
-            queryset=Transaction.objects.filter(
-                date__gte=first_day_of_settlement_period,
-                date__lte=last_day_of_settlement_period,
-            ),
-        )
-    )
+    monthly_balances_dict = get_monthly_balance_for_all_users()
 
-    for user in users:
-        monthly_incomes = (
-            user.transactions.filter(transaction_type=Transaction.Types.INCOME).aggregate(total=Sum('amount'))['total']
-            or 0
-        )
-        monthly_expenses = (
-            user.transactions.filter(transaction_type=Transaction.Types.EXPENSE).aggregate(total=Sum('amount'))['total']
-            or 0
-        )
-        monthly_balance = monthly_incomes - monthly_expenses
+    for user, monthly_balance in monthly_balances_dict.items():
 
         if monthly_balance > 0:
             subject = "Congratulations, you have reached a positive monthly balance!"
