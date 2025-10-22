@@ -9,6 +9,7 @@ from decimal import Decimal
 
 
 def calculate_total_saved(goal: "Goal") -> Decimal:
+    """Calculate the total amount saved for a given goal."""
     from apps.savings.models import Saving
 
     total_inflow = (

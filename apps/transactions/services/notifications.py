@@ -11,7 +11,7 @@ logger = getLogger(__name__)
 
 def send_monthly_balance_notification() -> None:
     """
-    Sends last month's balance notifications to all users
+    Send last month's balance notifications to all users
     with appropriate message based on the result.
     """
     current_date = get_current_date()

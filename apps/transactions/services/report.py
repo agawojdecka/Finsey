@@ -18,8 +18,9 @@ AVAILABLE_REPORT_FIELDS = [
 
 def generate_and_send_report(user_id: int, selected_columns: list[str]) -> None:
     """
-    Generates an Excel report filtered by the selected valid columns
-    with all transactions of a given user, and sends it in email to the recipient.
+    Generate an Excel report filtered by the columns selected by the user,
+    including all transactions of a given user, and send it via email
+    to the recipient.
     """
     user = User.objects.get(id=user_id)
 
@@ -55,7 +56,7 @@ def generate_and_send_report(user_id: int, selected_columns: list[str]) -> None:
 
 def generate_monthly_expense_report(user_id: int) -> None:
     """
-    Generates an Excel report of the user's expenses for the current month,
+    Generate an Excel report of the user's expenses for the current month,
     including a total expense summary at the end.
     """
     user = User.objects.get(id=user_id)

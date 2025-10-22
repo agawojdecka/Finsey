@@ -12,9 +12,7 @@ class GoalProgress:
 
 
 def calculate_goal_progress_by_monthly_savings(goal: Goal, monthly_savings: Decimal) -> GoalProgress:
-    """
-    Calculates the goal progress based on the monthly savings.
-    """
+    """Calculate goal progress based on user monthly savings."""
     total_saved = calculate_total_saved(goal)
 
     remaining_amount = goal.amount - total_saved
@@ -37,9 +35,7 @@ class GoalProgressPercentage:
 
 
 def calculate_goal_progress_percentage(goal: Goal) -> GoalProgressPercentage:
-    """
-    Calculates the percentage goal progress based on all user savings.
-    """
+    """Calculate percentage goal progress based on all user savings."""
     total_saved = calculate_total_saved(goal)
 
     try:

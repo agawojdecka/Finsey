@@ -1,15 +1,18 @@
-from datetime import date, timedelta
+from datetime import date
+
+from dateutil.relativedelta import relativedelta
 
 
 def get_first_day_of_month(day: date) -> date:
+    """Return the first day of the month from the given date."""
     return day.replace(day=1)
 
 
 def get_last_day_of_month(day: date) -> date:
-    if day.month == 12:
-        return day.replace(day=31)
-    return day.replace(month=day.month + 1, day=1) - timedelta(days=1)
+    """Return the last day of the month from the given date."""
+    return day + relativedelta(day=31)
 
 
 def get_current_date() -> date:
+    """Return the last day of the month from the given date."""
     return date.today()
