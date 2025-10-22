@@ -6,9 +6,9 @@ from apps.transactions.models import PlannedTransaction, Transaction
 
 def execute_planned_transactions() -> None:
     """
-    Executes planned transactions that have reached their scheduled time.
-    Creates new planned transactions for the next month for transactions
-    that had is_monthly_payment attribute set to True.
+    Execute all planned transactions that have reached their scheduled time,
+    create corresponding `Transaction` entries, mark executed plans
+    as completed, and reschedule monthly payments for the next month.
     """
     today = timezone.now().date()
 

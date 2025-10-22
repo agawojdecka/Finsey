@@ -4,6 +4,7 @@ from apps.savings.models import Goal
 
 
 def send_goal_achievement_notification() -> None:
+    """Send email notifications to users who have completed their goal."""
     goals = Goal.objects.select_related('user').filter(
         is_completed=True,
         notification_sent=False,
