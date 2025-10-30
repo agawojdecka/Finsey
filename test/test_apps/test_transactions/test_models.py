@@ -9,13 +9,11 @@ from apps.users.models import User
 
 
 @pytest.mark.django_db
-def test_create_transaction() -> None:
-    user = User.objects.create_user(username="test", password="1234")
-
+def test_create_transaction(test_user: User) -> None:
     account = Account.objects.create(
         account_type="MAIN",
         name="Test",
-        user=user,
+        user=test_user,
     )
 
     transaction = Transaction.objects.create(
@@ -23,7 +21,7 @@ def test_create_transaction() -> None:
         title="Salary",
         transaction_type="INCOME",
         amount=5000.00,
-        user=user,
+        user=test_user,
     )
 
     assert transaction.title == "Salary"
@@ -32,11 +30,11 @@ def test_create_transaction() -> None:
 
 
 @pytest.mark.django_db
-def test_create_category() -> None:
+def test_create_category(test_user: User) -> None:
     category = Category.objects.create(
         title="Salary",
         transaction_type="INCOME",
-        user=User.objects.create_user(username="test", password="1234"),
+        user=test_user,
     )
 
     assert category.title == "Salary"
@@ -44,20 +42,18 @@ def test_create_category() -> None:
 
 
 @pytest.mark.django_db
-def test_create_planned_transaction() -> None:
-    user = User.objects.create_user(username="test", password="1234")
-
+def test_create_planned_transaction(test_user: User) -> None:
     account = Account.objects.create(
         account_type="MAIN",
         name="Test",
-        user=user,
+        user=test_user,
     )
 
     planned_transaction = PlannedTransaction.objects.create(
         account=account,
         title="Test",
         amount=100.00,
-        user=user,
+        user=test_user,
         scheduled_at=timezone.now() + timedelta(days=1),
     )
 

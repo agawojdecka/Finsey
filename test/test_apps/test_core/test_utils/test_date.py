@@ -14,6 +14,7 @@ def test_get_first_day_of_month() -> None:
     "day,expected_day",
     [
         (date(2024, 2, 15), date(2024, 2, 29)),
+        (date(2024, 11, 3), date(2024, 11, 30)),
         (date(2024, 12, 1), date(2024, 12, 31)),
     ],
 )

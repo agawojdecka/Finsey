@@ -5,11 +5,11 @@ from apps.users.models import User
 
 
 @pytest.mark.django_db
-def test_create_saving() -> None:
+def test_create_saving(test_user: User) -> None:
     saving = Saving.objects.create(
         operation_type="INFLOW",
         amount=500,
-        user=User.objects.create_user(username="test", password="1234"),
+        user=test_user,
     )
 
     assert saving.operation_type == "INFLOW"
@@ -17,11 +17,11 @@ def test_create_saving() -> None:
 
 
 @pytest.mark.django_db
-def test_create_goal() -> None:
+def test_create_goal(test_user: User) -> None:
     goal = Goal.objects.create(
         title="Test Goal",
         amount=500,
-        user=User.objects.create_user(username="test", password="1234"),
+        user=test_user,
     )
 
     assert goal.title == "Test Goal"
